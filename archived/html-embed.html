@@ -1,0 +1,216 @@
+<style>
+  main {
+    background-color: #0278fe;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+  }
+
+  h1 {
+    color: #f8fbff;
+  }
+
+  form.icebreaker {
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    font-size: medium;
+  }
+
+  form.icebreaker>label {
+    grid-column: 1 / 2;
+    font-weight: bold;
+    color: #333;
+  }
+
+  form.icebreaker>input,
+  select {
+    width: 100%;
+    grid-column: 2 / 3;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  #progress-bar {
+    position: fixed;
+    margin-top: 0;
+    width: 100%;
+    height: 10px;
+    background-color: #3593fe;
+    align-self: center;
+  }
+
+  #progress-bar div {
+    height: 100%;
+    width: 0%;
+    background-color: #ffffff;
+  }
+
+  #question-display {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: xx-large;
+    line-height: 48px;
+    text-align: center;
+    color: #f8fbff;
+  }
+
+  #advanced-mode-submit-button {
+    margin: 30px;
+    padding: 10px;
+    display: block;
+    margin: auto;
+    text-align: center;
+    width: 50%;
+    background-color: #0278fe;
+    color: #f8fbff;
+    font-size: large;
+    font-weight: 900;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  button {
+    font-size: large;
+    font-weight: 900;
+    margin: 10px;
+    padding: 10px 30px;
+    background-color: #f8fbff;
+    color: #0278fe;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  button:hover {
+    background-color: #ecf4ff;
+  }
+
+  button.secondary {
+    border: 1px solid #f8fbff;
+    background-color: transparent;
+    color: #f8fbff;
+  }
+
+  button.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  #congratulations {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .button-container {
+    display: flex;
+    margin-bottom: 100px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .header {
+    padding: 20px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0px;
+  }
+
+  .quesstion-container {
+    margin: 20px;
+    width: 80%;
+    max-width: 960px;
+    display: flex;
+    font-size: large;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+</style>
+
+<main>
+
+  <div id="progress-bar" style="display: none">
+    <div></div>
+  </div>
+
+
+  <div class="header">
+    <object
+      data="https://uploads-ssl.webflow.com/6442419dcf656a60c976b4f2/6493ed8d35cf63e96981d458_flexos-AI-icebreaker-icon.svg"
+      width="60" height="67"> </object>
+    <h1>Icebreaker Generator</h1>
+  </div>
+
+
+
+  <div class="quesstion-container">
+    <div id="loader" style="display: none">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="congratulations" style="display: none">
+      <p>Congratulations!</p>
+      <button id="restart-button">Restart</button>
+    </div>
+
+    <div id="question-display"></div>
+    <button id="next-button" style="display: none">Next</button>
+    <div id="timer-display"></div>
+
+  </div>
+
+  <form class="icebreaker" id="icebreaker-form" style="display:none">
+    <label for="purpose">Purpose:</label>
+    <br />
+    <input type="text" id="purpose" name="purpose"
+      placeholder="Example: warm people up before a brainstorming session" />
+    <br />
+    <label for="time">Time:</label>
+    <br />
+    <select id="time" name="time">
+      <option value="5">5 minutes</option>
+      <option value="10">10 minutes</option>
+      <option value="15">15 minutes</option>
+      <option value="20">20 minutes</option>
+      <option value="25">25 minutes</option>
+      <option value="30">30 minutes</option>
+    </select>
+    <br />
+    <label for="participants">Participants:</label>
+    <br />
+    <input type="text" id="participants" name="participants" placeholder="Name 1, Name 2, Name 3, etc." />
+    <br />
+    <input id="advanced-mode-submit-button" type="submit" value="Let's bond" />
+  </form>
+
+
+
+  <div class="button-container">
+    <button id="next-question-button" style="display: block">
+      Next question
+    </button>
+    <button id="advanced-mode-button" class="secondary" style="display: block">
+      Advanced mode
+    </button>
+    <button id="basic-mode-button" class="secondary" style="display: none">
+      Basic mode
+    </button>
+  </div>
+
+  <script
+    src="https://uploads-ssl.webflow.com/6442419dcf656a60c976b4f2/64940bf763b5e98441ba75b6_icebreaker-script.txt"></script>
+</main>

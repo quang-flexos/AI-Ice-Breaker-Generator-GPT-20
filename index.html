@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Icebreaker Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://assets-global.website-files.com/6442419dcf656a60c976b4f2/css/flexos-work.webflow.ecbc7cfd7.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div id="icebreaker-background" class="ai-icebreaker-2 shadow-xlarge">
+    <div class="button-wrapper">
+      <div class="mode-wrapper">
+        <div class="button-wrapper">
+          <div id="normal-mode" class="mode-button is-active">
+            <div class="icon-fa-medium"></div>
+            <div class="text-block-10">Quick Mode</div>
+          </div>
+          <div id="ai-mode" class="mode-button">
+            <div class="icon-fa-medium"></div>
+            <div>AI&nbsp;Mode</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="ai-mode-wrapper" class="ai-mode-wrapper"><label class="mode-text" for="purpose">Purpose</label>
+      <input
+        type="text" class="icebreaker-input" id="purpose" name="purpose"
+        placeholder="Example: warm people up before a brainstorming session" required>
+      <label class="mode-text"
+        for="purpose">Time</label><select class="icebreaker-input" id="time" type="time" name="time">
+        <option value="5">5 minutes</option>
+        <option value="10">10 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="20">20 minutes</option>
+        <option value="25">25 minutes</option>
+        <option value="30">30 minutes</option>
+      </select>
+      <label class="mode-text" for="purpose">Participants</label>
+      <textarea class="icebreaker-input"
+        id="participants" name="participants" required></textarea>
+      <div id="submit-button" class="mode-button is-active">
+        <div><strong>Submit</strong></div>
+      </div>
+    </div>
+    <h1 id="icebreaker-question" class="icebreaker-question max-width-xlarge">Share an unusual or unique item on your
+      bucket list.</h1>
+    <div class="bottom-wrapper">
+      <div id="timer" class="timer">00:00</div><button class="mode-button is-active" type="button" id="next-button">Next
+        Question</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
