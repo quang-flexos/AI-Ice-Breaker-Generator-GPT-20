@@ -23,7 +23,7 @@ const virtualMeetingQuestions = [
   "What's the weirdest food combination you've ever tried and liked?",
   "Share an unusual or unique item on your bucket list.",
   "If you could have a dinner party with three fictional characters, who would you invite, and why?",
-  "What's the most adventurous thing you've ever done or an adventure you'd like to embark on?"
+  "What's the most adventurous thing you've ever done or an adventure you'd like to embark on?",
 ];
 
 const halloweenQuestions = [
@@ -46,7 +46,7 @@ const halloweenQuestions = [
   "What's the biggest Halloween party foul you've ever witnessed?",
   "What mythological monster would you most want to meet in real life?",
   "What horror movie or survival movie do you think you could have survived if you were a character in it?",
-  "If you could have the best Halloween party ever, what theme would you want for your party?"
+  "If you could have the best Halloween party ever, what theme would you want for your party?",
 ];
 
 const christmasQuestions = [
@@ -73,19 +73,29 @@ const christmasQuestions = [
   "If you could give Santa a new mode of transportation, what would it be?",
   "If Christmas were in summer, what new traditions would you start?",
   "Imagine a Christmas where all the gifts are invisible. How do you find yours?",
-  "What would be the most unexpected thing to find under your Christmas tree?"
+  "What would be the most unexpected thing to find under your Christmas tree?",
 ];
 
+const promptMap = {
+  "meet-the-team":
+    "Icebreaker for welcoming and connecting new team members easily.",
+  "project-start":
+    "Fun, engaging question to start our new project with energy.",
+  "fun-day-out": "Light-hearted, bonding activity for our team retreat.",
+  "learn-together": "Interactive icebreaker to kick off our training session.",
+  "monday-icebreaker":
+    "Quick, amusing question to open our weekly team meeting.",
+};
 
 //Global variables
-const icebreakerQuestion = document.getElementById('icebreaker-question');
-const nextButton = document.getElementById('next-button');
-const normalModeButton = document.getElementById('normal-mode');
-const aiModeButton = document.getElementById('ai-mode');
-const aiModeWrapper = document.getElementById('ai-mode-wrapper');
-const submitButton = document.getElementById('submit-button');
-const timer = document.getElementById('timer');
-const background = document.getElementById('icebreaker-background');
+const icebreakerQuestion = document.getElementById("icebreaker-question");
+const nextButton = document.getElementById("next-button");
+const normalModeButton = document.getElementById("normal-mode");
+const aiModeButton = document.getElementById("ai-mode");
+const aiModeWrapper = document.getElementById("ai-mode-wrapper");
+const submitButton = document.getElementById("submit-button");
+const timer = document.getElementById("timer");
+const background = document.getElementById("icebreaker-background");
 
 let questions = virtualMeetingQuestions;
 let currentQuestionIndex = -1;
@@ -93,16 +103,18 @@ let isAIMode = false;
 let countdown;
 
 //document event listener
-document.addEventListener('DOMContentLoaded', function() {
-  const mode = getURLParameter('mode');
+document.addEventListener("DOMContentLoaded", function () {
+  const mode = getURLParameter("mode");
   switch (mode) {
-    case 'halloween':
+    case "halloween":
       questions = halloweenQuestions;
-      document.getElementById('icebreaker-background').style.backgroundColor = '#FF8C00';
+      document.getElementById("icebreaker-background").style.backgroundColor =
+        "#FF8C00";
       break;
-    case 'christmas':
+    case "christmas":
       questions = christmasQuestions;
-      document.getElementById('icebreaker-background').style.backgroundColor = '#008000';
+      document.getElementById("icebreaker-background").style.backgroundColor =
+        "#008000";
       break;
     default:
       questions = virtualMeetingQuestions;
@@ -111,14 +123,31 @@ document.addEventListener('DOMContentLoaded', function() {
   currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
   icebreakerQuestion.textContent = questions[currentQuestionIndex];
 
-  nextButton.addEventListener('click', () => {
-    currentQuestionIndex = getRandomQuestionIndex(currentQuestionIndex, questions.length);
+  nextButton.addEventListener("click", () => {
+    currentQuestionIndex = getRandomQuestionIndex(
+      currentQuestionIndex,
+      questions.length
+    );
     icebreakerQuestion.textContent = questions[currentQuestionIndex];
   });
 
-  normalModeButton.addEventListener('click', () => toggleMode(false));
-  aiModeButton.addEventListener('click', () => toggleMode(true));
-  submitButton.addEventListener('click', submitAIResponse);
+  normalModeButton.addEventListener("click", () => toggleMode(false));
+  aiModeButton.addEventListener("click", () => toggleMode(true));
+  submitButton.addEventListener("click", submitAIResponse);
+
+  // Add event listeners to all purpose-item buttons
+  document.querySelectorAll(".purpose-item").forEach((button) => {
+    button.addEventListener("click", function () {
+      // Retrieve the longer prompt based on button ID
+      const longerPrompt = promptMap[this.id];
+
+      // Set the longer prompt as the value of the purpose input
+      document.getElementById("purpose").value = longerPrompt;
+
+      // Hide the clicked button
+      this.style.display = "none";
+    });
+  });
 });
 
 //random question logic
@@ -132,10 +161,10 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
 
 // Modify toggleMode function
 function toggleMode(isAIMode) {
-  normalModeButton.classList.toggle('is-active', !isAIMode);
-  aiModeButton.classList.toggle('is-active', isAIMode);
-  aiModeWrapper.style.display = isAIMode ? 'block' : 'none';
-  icebreakerQuestion.style.display = isAIMode ? 'none' : 'block';
+  normalModeButton.classList.toggle("is-active", !isAIMode);
+  aiModeButton.classList.toggle("is-active", isAIMode);
+  aiModeWrapper.style.display = isAIMode ? "block" : "none";
+  icebreakerQuestion.style.display = isAIMode ? "none" : "block";
   nextButton.disabled = isAIMode;
 
   if (!isAIMode) {
@@ -156,36 +185,40 @@ function showLoadingText(element, text) {
 // Submit AI Response
 async function submitAIResponse() {
   try {
-    aiModeWrapper.style.display = 'none';
-    icebreakerQuestion.style.display = 'block';
+    aiModeWrapper.style.display = "none";
+    icebreakerQuestion.style.display = "block";
     nextButton.disabled = true;
 
-    const loadingInterval = showLoadingText(icebreakerQuestion, "Please wait for a moment while the magic happens");
+    const loadingInterval = showLoadingText(
+      icebreakerQuestion,
+      "Please wait for a moment while the magic happens"
+    );
 
     await submitIcebreakerForm();
 
     clearInterval(loadingInterval);
-    timer.style.display = 'block';
+    timer.style.display = "block";
     icebreakerQuestion.textContent = "AI response is ready!";
 
     // Delay for 500ms before displaying the question
     setTimeout(() => {
-      icebreakerQuestion.textContent = window.questions[0] || "No questions available"; // Replace with actual question
+      icebreakerQuestion.textContent =
+        window.questions[0] || "No questions available"; // Replace with actual question
       nextButton.disabled = false;
     }, 500);
-
   } catch (error) {
     console.error("An error occurred:", error);
   }
 }
 
-
 //submit icebreaker form
 async function submitIcebreakerForm() {
   var purpose = document.getElementById("purpose").value;
   var time = document.getElementById("time").value;
-  var participants = document.getElementById("participants").value.split(",").map(p => p.trim());
-
+  var participants = document
+    .getElementById("participants")
+    .value.split(",")
+    .map((p) => p.trim());
 
   // Send a request to the back-end with the user's input
   const response = await fetch(
@@ -198,7 +231,7 @@ async function submitIcebreakerForm() {
       body: JSON.stringify({
         purpose: purpose,
         time: time,
-        participants: participants
+        participants: participants,
       }),
     }
   );
@@ -214,7 +247,7 @@ async function submitIcebreakerForm() {
 
   icebreakerQuestion.textContent = questions[0];
   nextButton.disabled = false;
-};
+}
 
 function startTimer(minutes) {
   const endTime = Date.now() + minutes * 60 * 1000;
@@ -235,7 +268,7 @@ function startTimer(minutes) {
   }
 
   function formatTime(num) {
-    return num < 10 ? '0' + num : num.toString();
+    return num < 10 ? "0" + num : num.toString();
   }
 
   updateTimer();
@@ -251,15 +284,15 @@ function resetToDefaultMode() {
   currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
   icebreakerQuestion.textContent = questions[currentQuestionIndex];
 
-  background.style.backgroundColor = '';
-  timer.style.display = 'none';
+  background.style.backgroundColor = "";
+  timer.style.display = "none";
 }
 
 // Function to clear the timer
 function clearTimer() {
   if (countdown) {
     clearInterval(countdown);
-    timer.textContent = '';
+    timer.textContent = "";
     countdown = null;
   }
 }
@@ -268,5 +301,3 @@ function clearTimer() {
 function getURLParameter(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
-
-

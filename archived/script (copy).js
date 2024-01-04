@@ -4,7 +4,7 @@ let randomColorsForQuestions = [
   "#7239E5",
   "#FFBB33",
   "#0BB05D",
-  "#0278FE"
+  "#0278FE",
 ];
 
 // Global variables to store the questions and current index
@@ -24,49 +24,48 @@ let waitingMessages = [
   "Hang in there! Your social lubricant is on its way...",
   "Crafting some questions to melt even the iciest of rooms...",
   "Sit tight, your conversation starters are brewing...",
-  "Hold on! Your ice-melting artillery is almost ready..."
+  "Hold on! Your ice-melting artillery is almost ready...",
 ];
 
 let totalQuestionsInAdvancedMode = null;
-let globalMode = 'basic';
+let globalMode = "basic";
 
 document
   .getElementById("advanced-mode-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     switchToAdvancedMode();
   });
 
-
 function fetchModes() {
-  return fetch('https://icebreakre-generator.onrender.com/modes')
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => console.error('Error fetching modes:', error));
+  return fetch("https://icebreakre-generator.onrender.com/modes")
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) => console.error("Error fetching modes:", error));
 }
 
 function fetchQuestionsForMode(modeId) {
   return fetch(`https://icebreakre-generator.onrender.com/questions/${modeId}`)
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => console.error('Error fetching questions for mode:', error));
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) =>
+      console.error("Error fetching questions for mode:", error)
+    );
 }
-
 
 function switchToAdvancedMode() {
   // Show the form
-  document.getElementById('icebreaker-form').style.display = 'block';
+  document.getElementById("icebreaker-form").style.display = "block";
   // Hide the "Another question" and "Advanced mode" buttons
-  document.getElementById('next-question-button').style.display = 'none';
+  document.getElementById("next-question-button").style.display = "none";
 
-  document.getElementById('advanced-mode-button').style.display = 'none';
+  document.getElementById("advanced-mode-button").style.display = "none";
   // Show the "Basic Mode" button
-  document.getElementById('basic-mode-button').style.display = 'block';
+  document.getElementById("basic-mode-button").style.display = "block";
 
   // Hide the progress bar and the icebreaker question section
-  document.getElementById('progress-bar').style.display = 'none';
-  document.getElementById('question-display').style.display = 'none';
+  document.getElementById("progress-bar").style.display = "none";
+  document.getElementById("question-display").style.display = "none";
 }
-
 
 /**
  * ADVANCED MODE
@@ -74,7 +73,7 @@ function switchToAdvancedMode() {
 
 document
   .getElementById("basic-mode-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     // Hide the form and "Basic Mode" button
     document.getElementById("icebreaker-form").style.display = "none";
     this.style.display = "none";
@@ -93,17 +92,18 @@ document
 
 document
   .getElementById("icebreaker-form")
-  .addEventListener("submit", async function(event) {
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
     var purpose = document.getElementById("purpose").value;
     var time = document.getElementById("time").value;
     var participants = document.getElementById("participants").value.split(" ");
 
     // Show the loader
-    var randomWaitingMessage = waitingMessages[Math.floor(Math.random() * waitingMessages.length)] + "This usually can take up to 50 seconds, so please wait for a moment for the magic to happen!"
-    document.getElementById('loader').style.display = 'block';
-    document.getElementById('loader').textContent = randomWaitingMessage;
-
+    var randomWaitingMessage =
+      waitingMessages[Math.floor(Math.random() * waitingMessages.length)] +
+      "This usually can take up to 50 seconds, so please wait for a moment for the magic to happen!";
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("loader").textContent = randomWaitingMessage;
 
     // Send a request to the back-end with the user's input
     const response = await fetch(
@@ -145,15 +145,17 @@ document
   });
 
 function randomizeBackgroundColor() {
-  var mainElement = document.querySelector('main');
+  var mainElement = document.querySelector("main");
   console.log(mainElement);
-  var randomColor = randomColorsForQuestions[Math.floor(Math.random() * randomColorsForQuestions.length)];
+  var randomColor =
+    randomColorsForQuestions[
+      Math.floor(Math.random() * randomColorsForQuestions.length)
+    ];
   console.log(randomColor);
   // mainElement.style["background-color"] = randomColor;
 }
 
-document.getElementById("next-button").addEventListener("click", function() {
-
+document.getElementById("next-button").addEventListener("click", function () {
   randomizeBackgroundColor();
 
   // Display the next participant and question
@@ -179,7 +181,7 @@ document.getElementById("next-button").addEventListener("click", function() {
 
 document
   .getElementById("restart-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     // Reset the form and hide the "Congratulations" screen
     window.location.reload();
   });
@@ -189,7 +191,7 @@ function startTimer(duration) {
     minutes,
     seconds;
   var display = document.querySelector("#timer-display");
-  var countdown = setInterval(function() {
+  var countdown = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -210,98 +212,103 @@ function startTimer(duration) {
  * BASIC MODE
  */
 
-
 // On page load, read the mode from the URL parameter and load the first question for that mode
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
+  const mode = urlParams.get("mode");
   if (mode) {
     loadQuestionForMode(mode);
   } else {
-    loadQuestionForMode('basic');
+    loadQuestionForMode("basic");
   }
 });
-
 
 // Function to load the next question
-document.getElementById("next-question-button").addEventListener("click", function() {
-  if (currentQuestionIndex < questionsForCurrentMode.length - 1) {
-    currentQuestionIndex++; // Increment the index to point to the next question
-  } else {
-    currentQuestionIndex = 0; // Reset index if it's the last question
-  }
-  displayCurrentQuestion();
-});
-
-
+document
+  .getElementById("next-question-button")
+  .addEventListener("click", function () {
+    if (currentQuestionIndex < questionsForCurrentMode.length - 1) {
+      currentQuestionIndex++; // Increment the index to point to the next question
+    } else {
+      currentQuestionIndex = 0; // Reset index if it's the last question
+    }
+    displayCurrentQuestion();
+  });
 
 function getRandomQuestion(mode) {
-  fetchModes().then(modes => {
-    const selectedMode = modes.find(m => m.name.toLowerCase() === mode);
+  fetchModes().then((modes) => {
+    const selectedMode = modes.find((m) => m.name.toLowerCase() === mode);
     if (selectedMode) {
-      fetchQuestionsForMode(selectedMode.id).then(questions => {
+      fetchQuestionsForMode(selectedMode.id).then((questions) => {
         if (questions.length > 0) {
           const randomIndex = Math.floor(Math.random() * questions.length);
-          document.getElementById("question-display").textContent = questions[randomIndex].content;
+          document.getElementById("question-display").textContent =
+            questions[randomIndex].content;
         } else {
-          document.getElementById("question-display").textContent = "No questions found for this mode.";
+          document.getElementById("question-display").textContent =
+            "No questions found for this mode.";
         }
       });
     }
   });
 }
 
-
-
-
 function switchToRegularMode() {
   var randomQuestion = getRandomQuestion();
   // Display the question and show the "Start Timer" button
-  document.getElementById('question-display').textContent = randomQuestion;
-  document.getElementById('icebreaker-form').style.display = 'none';
+  document.getElementById("question-display").textContent = randomQuestion;
+  document.getElementById("icebreaker-form").style.display = "none";
 }
 
 function handleIcebreakerModes(urlParams) {
-  const advancedMode = urlParams.get('advanced_mode');
-  const mode = urlParams.get('mode');
+  const advancedMode = urlParams.get("advanced_mode");
+  const mode = urlParams.get("mode");
 
   // Set the globalMode variable based on URL parameters
   if (advancedMode) {
-    globalMode = 'advanced';
+    globalMode = "advanced";
   } else if (mode) {
     globalMode = mode; // Assuming that the mode names in the URL match the mode names in the database
   } else {
-    globalMode = 'basic'; // Default to 'basic' if no mode is specified
+    globalMode = "basic"; // Default to 'basic' if no mode is specified
   }
 }
 
 // Function to display the current question
 function displayCurrentQuestion() {
-  if (questionsForCurrentMode.length > 0 && currentQuestionIndex < questionsForCurrentMode.length) {
-    document.getElementById("question-display").textContent = questionsForCurrentMode[currentQuestionIndex].content;
+  if (
+    questionsForCurrentMode.length > 0 &&
+    currentQuestionIndex < questionsForCurrentMode.length
+  ) {
+    document.getElementById("question-display").textContent =
+      questionsForCurrentMode[currentQuestionIndex].content;
     randomizeBackgroundColor();
   } else {
-    document.getElementById("question-display").textContent = "No more questions available.";
+    document.getElementById("question-display").textContent =
+      "No more questions available.";
   }
 }
 
-
 // Function to load the initial question for a mode
 function loadQuestionForMode(mode) {
-  fetchModes().then(modes => {
-    const selectedMode = modes.find(m => m.name.toLowerCase() === mode.toLowerCase());
+  fetchModes().then((modes) => {
+    const selectedMode = modes.find(
+      (m) => m.name.toLowerCase() === mode.toLowerCase()
+    );
     if (selectedMode) {
-      fetchQuestionsForMode(selectedMode.id).then(questions => {
+      fetchQuestionsForMode(selectedMode.id).then((questions) => {
         questionsForCurrentMode = questions;
         currentQuestionIndex = 0; // Start from the first question
         if (questionsForCurrentMode.length > 0) {
           displayCurrentQuestion();
         } else {
-          document.getElementById("question-display").textContent = "No questions found for this mode.";
+          document.getElementById("question-display").textContent =
+            "No questions found for this mode.";
         }
       });
     } else {
-      document.getElementById("question-display").textContent = "Mode not found.";
+      document.getElementById("question-display").textContent =
+        "Mode not found.";
     }
   });
 }

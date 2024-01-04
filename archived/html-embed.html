@@ -23,13 +23,13 @@
     font-size: medium;
   }
 
-  form.icebreaker>label {
+  form.icebreaker > label {
     grid-column: 1 / 2;
     font-weight: bold;
     color: #333;
   }
 
-  form.icebreaker>input,
+  form.icebreaker > input,
   select {
     width: 100%;
     grid-column: 2 / 3;
@@ -142,20 +142,18 @@
 </style>
 
 <main>
-
   <div id="progress-bar" style="display: none">
     <div></div>
   </div>
 
-
   <div class="header">
     <object
       data="https://uploads-ssl.webflow.com/6442419dcf656a60c976b4f2/6493ed8d35cf63e96981d458_flexos-AI-icebreaker-icon.svg"
-      width="60" height="67"> </object>
+      width="60"
+      height="67"
+    ></object>
     <h1>Icebreaker Generator</h1>
   </div>
-
-
 
   <div class="quesstion-container">
     <div id="loader" style="display: none">
@@ -170,14 +168,17 @@
     <div id="question-display"></div>
     <button id="next-button" style="display: none">Next</button>
     <div id="timer-display"></div>
-
   </div>
 
-  <form class="icebreaker" id="icebreaker-form" style="display:none">
+  <form class="icebreaker" id="icebreaker-form" style="display: none">
     <label for="purpose">Purpose:</label>
     <br />
-    <input type="text" id="purpose" name="purpose"
-      placeholder="Example: warm people up before a brainstorming session" />
+    <input
+      type="text"
+      id="purpose"
+      name="purpose"
+      placeholder="Example: warm people up before a brainstorming session"
+    />
     <br />
     <label for="time">Time:</label>
     <br />
@@ -192,12 +193,15 @@
     <br />
     <label for="participants">Participants:</label>
     <br />
-    <input type="text" id="participants" name="participants" placeholder="Name 1, Name 2, Name 3, etc." />
+    <input
+      type="text"
+      id="participants"
+      name="participants"
+      placeholder="Name 1, Name 2, Name 3, etc."
+    />
     <br />
     <input id="advanced-mode-submit-button" type="submit" value="Let's bond" />
   </form>
-
-
 
   <div class="button-container">
     <button id="next-question-button" style="display: block">
@@ -211,6 +215,5 @@
     </button>
   </div>
 
-  <script
-    src="https://uploads-ssl.webflow.com/6442419dcf656a60c976b4f2/64940bf763b5e98441ba75b6_icebreaker-script.txt"></script>
+  <script src="https://uploads-ssl.webflow.com/6442419dcf656a60c976b4f2/64940bf763b5e98441ba75b6_icebreaker-script.txt"></script>
 </main>

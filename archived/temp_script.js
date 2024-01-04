@@ -44,7 +44,7 @@ var halloweenQuestions = [
   "What's the biggest Halloween party foul you've ever witnessed?",
   "What mythological monster would you most want to meet in real life?",
   "What horror movie or survival movie do you think you could have survived if you were a character in it?",
-  "If you could have the best Halloween party ever, what theme would you want for your party?"
+  "If you could have the best Halloween party ever, what theme would you want for your party?",
 ];
 
 let randomChristmasQuestions = [
@@ -71,9 +71,8 @@ let randomChristmasQuestions = [
   "If you could give Santa a new mode of transportation, what would it be?",
   "If Christmas were in summer, what new traditions would you start?",
   "Imagine a Christmas where all the gifts are invisible. How do you find yours?",
-  "What would be the most unexpected thing to find under your Christmas tree?"
+  "What would be the most unexpected thing to find under your Christmas tree?",
 ];
-
 
 let randomColorsForQuestions = [
   "#F03D5B",
@@ -81,7 +80,7 @@ let randomColorsForQuestions = [
   "#7239E5",
   "#FFBB33",
   "#0BB05D",
-  "#0278FE"
+  "#0278FE",
 ];
 
 let waitingMessages = [
@@ -97,33 +96,32 @@ let waitingMessages = [
   "Hang in there! Your social lubricant is on its way...",
   "Crafting some questions to melt even the iciest of rooms...",
   "Sit tight, your conversation starters are brewing...",
-  "Hold on! Your ice-melting artillery is almost ready..."
+  "Hold on! Your ice-melting artillery is almost ready...",
 ];
 
 let totalQuestionsInAdvancedMode = null;
-let globalMode = 'basic';
+let globalMode = "basic";
 
 document
   .getElementById("advanced-mode-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     switchToAdvancedMode();
   });
 
 function switchToAdvancedMode() {
   // Show the form
-  document.getElementById('icebreaker-form').style.display = 'block';
+  document.getElementById("icebreaker-form").style.display = "block";
   // Hide the "Another question" and "Advanced mode" buttons
-  document.getElementById('next-question-button').style.display = 'none';
+  document.getElementById("next-question-button").style.display = "none";
 
-  document.getElementById('advanced-mode-button').style.display = 'none';
+  document.getElementById("advanced-mode-button").style.display = "none";
   // Show the "Basic Mode" button
-  document.getElementById('basic-mode-button').style.display = 'block';
+  document.getElementById("basic-mode-button").style.display = "block";
 
   // Hide the progress bar and the icebreaker question section
-  document.getElementById('progress-bar').style.display = 'none';
-  document.getElementById('question-display').style.display = 'none';
+  document.getElementById("progress-bar").style.display = "none";
+  document.getElementById("question-display").style.display = "none";
 }
-
 
 /**
  * ADVANCED MODE
@@ -131,7 +129,7 @@ function switchToAdvancedMode() {
 
 document
   .getElementById("basic-mode-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     // Hide the form and "Basic Mode" button
     document.getElementById("icebreaker-form").style.display = "none";
     this.style.display = "none";
@@ -150,17 +148,18 @@ document
 
 document
   .getElementById("icebreaker-form")
-  .addEventListener("submit", async function(event) {
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
     var purpose = document.getElementById("purpose").value;
     var time = document.getElementById("time").value;
     var participants = document.getElementById("participants").value.split(" ");
 
     // Show the loader
-    var randomWaitingMessage = waitingMessages[Math.floor(Math.random() * waitingMessages.length)] + "This usually can take up to 50 seconds, so please wait for a moment for the magic to happen!"
-    document.getElementById('loader').style.display = 'block';
-    document.getElementById('loader').textContent = randomWaitingMessage;
-
+    var randomWaitingMessage =
+      waitingMessages[Math.floor(Math.random() * waitingMessages.length)] +
+      "This usually can take up to 50 seconds, so please wait for a moment for the magic to happen!";
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("loader").textContent = randomWaitingMessage;
 
     // Send a request to the back-end with the user's input
     const response = await fetch(
@@ -202,15 +201,17 @@ document
   });
 
 function randomizeBackgroundColor() {
-  var mainElement = document.querySelector('main');
+  var mainElement = document.querySelector("main");
   console.log(mainElement);
-  var randomColor = randomColorsForQuestions[Math.floor(Math.random() * randomColorsForQuestions.length)];
+  var randomColor =
+    randomColorsForQuestions[
+      Math.floor(Math.random() * randomColorsForQuestions.length)
+    ];
   console.log(randomColor);
   mainElement.style["background-color"] = randomColor;
 }
 
-document.getElementById("next-button").addEventListener("click", function() {
-
+document.getElementById("next-button").addEventListener("click", function () {
   randomizeBackgroundColor();
 
   // Display the next participant and question
@@ -236,7 +237,7 @@ document.getElementById("next-button").addEventListener("click", function() {
 
 document
   .getElementById("restart-button")
-  .addEventListener("click", function() {
+  .addEventListener("click", function () {
     // Reset the form and hide the "Congratulations" screen
     window.location.reload();
   });
@@ -246,7 +247,7 @@ function startTimer(duration) {
     minutes,
     seconds;
   var display = document.querySelector("#timer-display");
-  var countdown = setInterval(function() {
+  var countdown = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -267,57 +268,57 @@ function startTimer(duration) {
  * BASIC MODE
  */
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Detect if the URL contains an `advanced_mode` parameter, and click to open Advanced Mode.
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   globalMode = handleIcebreakerModes(urlParams);
-  if (globalMode == 'advanced') {
+  if (globalMode == "advanced") {
     switchToAdvancedMode();
-  } else
-    switchToRegularMode();
+  } else switchToRegularMode();
 });
 
 document
   .getElementById("next-question-button")
-  .addEventListener("click", function() {
-
+  .addEventListener("click", function () {
     randomizeBackgroundColor();
     // Select a random question
-    var randomQuestion =
-      getRandomQuestion();
+    var randomQuestion = getRandomQuestion();
     // Display the question
     document.getElementById("question-display").textContent = randomQuestion;
   });
 
 function getRandomQuestion() {
-  if (globalMode == 'halloween') {
-    return halloweenQuestions[Math.floor(Math.random() * halloweenQuestions.length)];
-  } else if (globalMode == 'basic')
+  if (globalMode == "halloween") {
+    return halloweenQuestions[
+      Math.floor(Math.random() * halloweenQuestions.length)
+    ];
+  } else if (globalMode == "basic")
     return randomQuestions[Math.floor(Math.random() * randomQuestions.length)];
-  else if (globalMode == 'christmas') {
-    return randomChristmasQuestions[Math.floor(Math.random() * randomChristmasQuestions.length)];
+  else if (globalMode == "christmas") {
+    return randomChristmasQuestions[
+      Math.floor(Math.random() * randomChristmasQuestions.length)
+    ];
   }
 }
 
 function switchToRegularMode() {
   var randomQuestion = getRandomQuestion();
   // Display the question and show the "Start Timer" button
-  document.getElementById('question-display').textContent = randomQuestion;
-  document.getElementById('icebreaker-form').style.display = 'none';
+  document.getElementById("question-display").textContent = randomQuestion;
+  document.getElementById("icebreaker-form").style.display = "none";
 }
 
 function handleIcebreakerModes(urlParams) {
-  const advancedMode = urlParams.get('advanced_mode');
+  const advancedMode = urlParams.get("advanced_mode");
   if (advancedMode) {
-    return 'advanced';
+    return "advanced";
   }
-  const mode = urlParams.get('mode');
-  if (mode == 'halloween') {
-    return 'halloween';
-  } else if (mode == 'christmas') {
-    return 'christmas';
+  const mode = urlParams.get("mode");
+  if (mode == "halloween") {
+    return "halloween";
+  } else if (mode == "christmas") {
+    return "christmas";
   }
-  return 'basic';
+  return "basic";
 }
