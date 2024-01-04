@@ -103,7 +103,7 @@ let isAIMode = false;
 let countdown;
 
 //document event listener
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   const mode = getURLParameter("mode");
   switch (mode) {
     case "halloween":
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add event listeners to all purpose-item buttons
   document.querySelectorAll(".purpose-item").forEach((button) => {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function() {
       // Retrieve the longer prompt based on button ID
       const longerPrompt = promptMap[this.id];
 
@@ -163,7 +163,7 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
 function toggleMode(isAIMode) {
   normalModeButton.classList.toggle("is-active", !isAIMode);
   aiModeButton.classList.toggle("is-active", isAIMode);
-  aiModeWrapper.style.display = isAIMode ? "block" : "none";
+  aiModeWrapper.style.display = isAIMode ? "grid" : "none";
   icebreakerQuestion.style.display = isAIMode ? "none" : "block";
   nextButton.disabled = isAIMode;
 
