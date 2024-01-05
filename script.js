@@ -133,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   normalModeButton.addEventListener("click", () => toggleMode(false));
   aiModeButton.addEventListener("click", () => toggleMode(true));
-  submitButton.addEventListener("click", submitAIResponse);
 
   // Add event listeners to all purpose-item buttons
   document.querySelectorAll(".purpose-item").forEach((button) => {
@@ -180,6 +179,27 @@ function showLoadingText(element, text) {
     element.textContent = text + ".".repeat(dots);
     dots = (dots + 1) % 4;
   }, 500);
+}
+
+// Submit AI Response with Validation
+submitButton.addEventListener("click", () => {
+  if (validateInput()) {
+    submitAIResponse();
+  } else {
+    alert("Please enter a valid purpose and at least two participants.");
+  }
+});
+
+// Validation Function
+function validateInput() {
+  var purpose = document.getElementById("purpose").value.trim();
+  var participants = document
+    .getElementById("participants")
+    .value.split(",")
+    .map(p => p.trim())
+    .filter(p => p !== ""); // Remove empty strings
+
+  return purpose !== "" && participants.length >= 2;
 }
 
 // Submit AI Response
