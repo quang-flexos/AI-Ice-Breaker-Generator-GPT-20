@@ -256,12 +256,16 @@ async function submitIcebreakerForm() {
     }
   );
   let data = await response.json();
-  questions = Object.values(data.generatedQuestions);
 
-  totalQuestionsInAdvancedMode = questions.length;
+  let listOfParticipants = data.generatedQuestions.map(o => Object.keys(o)[0]);
 
-  window.participants = participants.slice(1);
-  window.questions = questions.slice(1);
+  let listOfQuestions = data.generatedQuestions.map(o => Object.values(o)[0]);
+
+  questions = data.generatedQuestions.map(o => Object.values(o)[0]);
+  totalQuestionsInAdvancedMode = listOfParticipants.length;
+
+  window.participants = listOfParticipants.slice(1);
+  window.questions = listOfQuestions.slice(1);
 
   window.countdown = startTimer(time);
 
