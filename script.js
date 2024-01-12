@@ -76,17 +76,6 @@ const christmasQuestions = [
   "What would be the most unexpected thing to find under your Christmas tree?",
 ];
 
-const promptMap = {
-  "meet-the-team":
-    "Icebreaker for welcoming and connecting new team members easily.",
-  "project-start":
-    "Fun, engaging question to start our new project with energy.",
-  "fun-day-out": "Light-hearted, bonding activity for our team retreat.",
-  "learn-together": "Interactive icebreaker to kick off our training session.",
-  "monday-icebreaker":
-    "Quick, amusing question to open our weekly team meeting.",
-};
-
 //Global variables
 const icebreakerQuestion = document.getElementById("icebreaker-question");
 const nextButton = document.getElementById("next-button");
@@ -97,29 +86,35 @@ const submitButton = document.getElementById("submit-button");
 const timer = document.getElementById("timer");
 const background = document.getElementById("icebreaker-background");
 
-let questions = virtualMeetingQuestions;
+let questions = [];
 let currentQuestionIndex = -1;
+let totalQuestions = 0;
+
 let isAIMode = false;
 let countdown;
-let currentAIQuestionIndex = 0;
-let aiQuestions = [];
 
-//document event listener
-document.addEventListener("DOMContentLoaded", function() {
+// get URL parameter
+function getURLParameter(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+//Document Event Listener
+document.addEventListener("DOMContentLoaded", function () {
   const mode = getURLParameter("mode");
   switch (mode) {
     case "halloween":
       questions = halloweenQuestions;
-      document.getElementById("icebreaker-background").style.backgroundColor =
+      background.style.backgroundColor =
         "#FF8C00";
       break;
     case "christmas":
       questions = christmasQuestions;
-      document.getElementById("icebreaker-background").style.backgroundColor =
+      background.style.backgroundColor =
         "#008000";
       break;
     default:
       questions = virtualMeetingQuestions;
+      background.style.backgroundColor = null;
   }
 
   currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
@@ -138,29 +133,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Add event listeners to all purpose-item buttons
   document.querySelectorAll(".purpose-item").forEach((button) => {
-    button.addEventListener("click", function() {
-      // Retrieve the longer prompt based on button ID
+    button.addEventListener("click", function () {
       const longerPrompt = promptMap[this.id];
-
-      // Set the longer prompt as the value of the purpose input
       document.getElementById("purpose").value = longerPrompt;
-
-      // Hide the clicked button
       this.style.display = "none";
     });
   });
 });
 
-//random question logic
-function getRandomQuestionIndex(currentIndex, totalQuestions) {
-  let randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * totalQuestions);
-  } while (randomIndex === currentIndex);
-  return randomIndex;
-}
-
-// Modify toggleMode function
+// toggleMode function
 function toggleMode(isAIMode) {
   normalModeButton.classList.toggle("is-active", !isAIMode);
   aiModeButton.classList.toggle("is-active", isAIMode);
@@ -173,25 +154,56 @@ function toggleMode(isAIMode) {
   }
 }
 
-// Function to show loading text animation
-function showLoadingText(element, text) {
-  let dots = 0;
-  element.textContent = text;
-  return setInterval(() => {
-    element.textContent = text + ".".repeat(dots);
-    dots = (dots + 1) % 4;
-  }, 500);
+// New function to reset to default mode
+function resetToDefaultMode() {
+  clearTimer();
+
+  questions = virtualMeetingQuestions;
+  currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
+  icebreakerQuestion.textContent = questions[currentQuestionIndex];
+
+  background.style.backgroundColor = null;
+  timer.style.display = "none";
 }
 
-// Modify the existing event listener for the submit button
-submitButton.addEventListener("click", () => {
-  if (validateInput()) {
-    submitAIResponse();
-  } else {
-    alert("Please enter a valid purpose and at least two participants.");
-  }
-});
+//Random Questions Logic
+function getRandomQuestionIndex(currentIndex, totalQuestions) {
+  let randomIndex;
+  do {
+    randomIndex = Math.floor(Math.random() * totalQuestions);
+  } while (randomIndex === currentIndex);
+  return randomIndex;
+}
 
+// Function to display the next question
+function showNextQuestion() {
+  currentQuestionIndex++;
+
+  if (currentQuestionIndex < totalQuestions) {
+    icebreakerQuestion.textContent = questions[currentQuestionIndex];
+  } else {
+    icebreakerQuestion.textContent = "That's it for now!";
+    nextButton.disabled = true;
+  }
+}
+
+/*
+A.I MODE
+*/
+
+//suggestion purpose
+const promptMap = {
+  "meet-the-team":
+    "Icebreaker for welcoming and connecting new team members easily.",
+  "project-start":
+    "Fun, engaging question to start our new project with energy.",
+  "fun-day-out": "Light-hearted, bonding activity for our team retreat.",
+  "learn-together": "Interactive icebreaker to kick off our training session.",
+  "monday-icebreaker":
+    "Quick, amusing question to open our weekly team meeting.",
+};
+
+// Add event listener for Submit Button
 document.getElementById("purpose").addEventListener("input", updateSubmitButtonState);
 document.getElementById("participants").addEventListener("input", updateSubmitButtonState);
 
@@ -201,18 +213,37 @@ function validateInput() {
   var participants = document
     .getElementById("participants")
     .value.split(",")
-    .map(p => p.trim())
-    .filter(p => p !== ""); // Remove empty strings
+    .map((p) => p.trim())
+    .filter((p) => p !== "");
 
   return purpose !== "" && participants.length >= 2;
 }
 
-// Function to update the state of the submit button
+// Function to update the state of the Submit Button
 function updateSubmitButtonState() {
   submitButton.disabled = !validateInput();
 }
 
-// Submit AI Response
+// Event listener for the Submit Button
+submitButton.addEventListener("click", () => {
+  if (validateInput()) {
+    submitAIResponse();
+  } else {
+    alert("Please enter a valid purpose and at least two participants.");
+  }
+});
+
+// Loading animation...
+function showLoadingText(element, text) {
+  let dots = 0;
+  element.textContent = text;
+  return setInterval(() => {
+    element.textContent = text + ".".repeat(dots);
+    dots = (dots + 1) % 4;
+  }, 500);
+}
+
+// Send AI Response
 async function submitAIResponse() {
   try {
     aiModeWrapper.style.display = "none";
@@ -233,7 +264,7 @@ async function submitAIResponse() {
     // Delay for 500ms before displaying the question
     setTimeout(() => {
       icebreakerQuestion.textContent =
-        window.questions[0] || "No questions available"; // Replace with actual question
+        window.questions[0] || "No questions available";
       nextButton.disabled = false;
     }, 500);
   } catch (error) {
@@ -241,7 +272,7 @@ async function submitAIResponse() {
   }
 }
 
-//submit icebreaker form
+//Submit Icebreaker Form
 async function submitIcebreakerForm() {
   var purpose = document.getElementById("purpose").value;
   var time = document.getElementById("time").value;
@@ -267,11 +298,13 @@ async function submitIcebreakerForm() {
   );
   let data = await response.json();
 
-  let listOfParticipants = data.generatedQuestions.map(o => Object.keys(o)[0]);
+  let listOfParticipants = data.generatedQuestions.map(
+    (o) => Object.keys(o)[0]
+  );
 
-  let listOfQuestions = data.generatedQuestions.map(o => Object.values(o)[0]);
+  let listOfQuestions = data.generatedQuestions.map((o) => Object.values(o)[0]);
 
-  questions = data.generatedQuestions.map(o => Object.values(o)[0]);
+  questions = data.generatedQuestions.map((o) => Object.values(o)[0]);
   totalQuestionsInAdvancedMode = listOfParticipants.length;
 
   window.participants = listOfParticipants.slice(1);
@@ -283,6 +316,7 @@ async function submitIcebreakerForm() {
   nextButton.disabled = false;
 }
 
+//Start the timer
 function startTimer(minutes) {
   const endTime = Date.now() + minutes * 60 * 1000;
   const display = document.getElementById("timer");
@@ -310,18 +344,6 @@ function startTimer(minutes) {
   return countdown;
 }
 
-// New function to reset to default mode
-function resetToDefaultMode() {
-  clearTimer();
-
-  questions = virtualMeetingQuestions;
-  currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
-  icebreakerQuestion.textContent = questions[currentQuestionIndex];
-
-  background.style.backgroundColor = "";
-  timer.style.display = "none";
-}
-
 // Function to clear the timer
 function clearTimer() {
   if (countdown) {
@@ -329,9 +351,4 @@ function clearTimer() {
     timer.textContent = "";
     countdown = null;
   }
-}
-
-// get URL parameter
-function getURLParameter(name) {
-  return new URLSearchParams(window.location.search).get(name);
 }
