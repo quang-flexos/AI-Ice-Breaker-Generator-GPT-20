@@ -184,6 +184,10 @@ function showNextQuestion() {
   } else {
     icebreakerQuestion.textContent = "That's it for now!";
     nextButton.disabled = true;
+    clearTimer();
+    setTimeout(() => {
+      resetToDefaultMode();
+    },500)
   }
 }
 
@@ -263,8 +267,7 @@ async function submitAIResponse() {
 
     // Delay for 500ms before displaying the question
     setTimeout(() => {
-      icebreakerQuestion.textContent =
-        window.questions[0] || "No questions available";
+      icebreakerQuestion.textContent = window.questions[0] || "No questions available";
       nextButton.disabled = false;
     }, 500);
   } catch (error) {
