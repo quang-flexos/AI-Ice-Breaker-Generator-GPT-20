@@ -101,6 +101,8 @@ let questions = virtualMeetingQuestions;
 let currentQuestionIndex = -1;
 let isAIMode = false;
 let countdown;
+let currentAIQuestionIndex = 0;
+let aiQuestions = [];
 
 //document event listener
 document.addEventListener("DOMContentLoaded", function() {
@@ -181,7 +183,7 @@ function showLoadingText(element, text) {
   }, 500);
 }
 
-// Submit AI Response with Validation
+// Modify the existing event listener for the submit button
 submitButton.addEventListener("click", () => {
   if (validateInput()) {
     submitAIResponse();
@@ -190,7 +192,10 @@ submitButton.addEventListener("click", () => {
   }
 });
 
-// Validation Function
+document.getElementById("purpose").addEventListener("input", updateSubmitButtonState);
+document.getElementById("participants").addEventListener("input", updateSubmitButtonState);
+
+// Validation function for real-time validation
 function validateInput() {
   var purpose = document.getElementById("purpose").value.trim();
   var participants = document
@@ -200,6 +205,11 @@ function validateInput() {
     .filter(p => p !== ""); // Remove empty strings
 
   return purpose !== "" && participants.length >= 2;
+}
+
+// Function to update the state of the submit button
+function updateSubmitButtonState() {
+  submitButton.disabled = !validateInput();
 }
 
 // Submit AI Response
