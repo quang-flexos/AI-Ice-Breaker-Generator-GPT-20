@@ -178,6 +178,7 @@ function showNextQuestion() {
     clearTimer();
     setTimeout(() => {
       resetToDefaultMode();
+      nextButton.disabled = false;
     },500)
   }
 }
@@ -333,7 +334,7 @@ function startTimer(minutes) {
     return num < 10 ? "0" + num : num.toString();
   }
 
-  updateTimer();
+  updateTimer(); // Update the timer immediately
   const countdown = setInterval(updateTimer, 1000);
   return countdown;
 }
