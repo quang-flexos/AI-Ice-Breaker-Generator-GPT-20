@@ -179,7 +179,7 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
 function showNextQuestion() {
   currentQuestionIndex++;
 
-  if (currentQuestionIndex < totalQuestions) {
+  if (currentQuestionIndex < questions.length) {
     icebreakerQuestion.textContent = questions[currentQuestionIndex];
   } else {
     icebreakerQuestion.textContent = "That's it for now!";
