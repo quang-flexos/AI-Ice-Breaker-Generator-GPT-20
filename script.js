@@ -117,16 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
       background.style.backgroundColor = null;
   }
 
-  currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
-  icebreakerQuestion.textContent = questions[currentQuestionIndex];
-
-  nextButton.addEventListener("click", () => {
-    currentQuestionIndex = getRandomQuestionIndex(
-      currentQuestionIndex,
-      questions.length
-    );
-    icebreakerQuestion.textContent = questions[currentQuestionIndex];
-  });
+  nextButton.addEventListener("click", showNextQuestion);
 
   normalModeButton.addEventListener("click", () => toggleMode(false));
   aiModeButton.addEventListener("click", () => toggleMode(true));
@@ -306,7 +297,7 @@ async function submitIcebreakerForm() {
   );
 
   let listOfQuestions = data.generatedQuestions.map((o) => Object.values(o)[0]);
-
+  questions = [];
   questions = data.generatedQuestions.map((o) => Object.values(o)[0]);
   totalQuestionsInAdvancedMode = listOfParticipants.length;
 
