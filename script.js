@@ -104,13 +104,11 @@ document.addEventListener("DOMContentLoaded", function () {
   switch (mode) {
     case "halloween":
       questions = halloweenQuestions;
-      background.style.backgroundColor =
-        "#FF8C00";
+      background.style.backgroundColor = "#FF8C00";
       break;
     case "christmas":
       questions = christmasQuestions;
-      background.style.backgroundColor =
-        "#008000";
+      background.style.backgroundColor = "#008000";
       break;
     default:
       questions = virtualMeetingQuestions;
@@ -130,6 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
       this.style.display = "none";
     });
   });
+
+  // Add event listener for Submit Button
+  document.getElementById("purpose").addEventListener("input", updateSubmitButtonState);
+  document.getElementById("participants").addEventListener("input", updateSubmitButtonState);
 });
 
 // toggleMode function
@@ -179,7 +181,7 @@ function showNextQuestion() {
     setTimeout(() => {
       resetToDefaultMode();
       nextButton.disabled = false;
-    },500)
+    }, 500);
   }
 }
 
@@ -198,10 +200,6 @@ const promptMap = {
   "monday-icebreaker":
     "Quick, amusing question to open our weekly team meeting.",
 };
-
-// Add event listener for Submit Button
-document.getElementById("purpose").addEventListener("input", updateSubmitButtonState);
-document.getElementById("participants").addEventListener("input", updateSubmitButtonState);
 
 // Validation function for real-time validation
 function validateInput() {
