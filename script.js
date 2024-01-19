@@ -87,7 +87,7 @@ const timer = document.getElementById("timer");
 const background = document.getElementById("icebreaker-background");
 
 let questions = [];
-let currentQuestionIndex = -1;
+let currentQuestionIndex = 0;
 let totalQuestions = 0;
 
 let isAIMode = false;
@@ -345,3 +345,4 @@ function clearTimer() {
     countdown = null;
   }
 }
+
