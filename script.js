@@ -87,7 +87,7 @@ const timer = document.getElementById("timer");
 const background = document.getElementById("icebreaker-background");
 
 let questions = [];
-let currentQuestionIndex = 0;
+let currentQuestionIndex = -1;
 let totalQuestions = 0;
 
 let isAIMode = false;
@@ -301,12 +301,10 @@ async function submitIcebreakerForm() {
   totalQuestionsInAdvancedMode = listOfParticipants.length;
 
   window.participants = listOfParticipants.slice(1);
-  window.questions = listOfQuestions.slice(1);
-
+  window.questions = listOfQuestions;
+  currentQuestionIndex = -1;
   window.countdown = startTimer(time);
-
-  icebreakerQuestion.textContent = questions[0];
-  nextButton.disabled = false;
+  showNextQuestion();
 }
 
 //Start the timer
