@@ -130,8 +130,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Add event listener for Submit Button
-  document.getElementById("purpose").addEventListener("input", updateSubmitButtonState);
-  document.getElementById("participants").addEventListener("input", updateSubmitButtonState);
+  document
+    .getElementById("purpose")
+    .addEventListener("input", updateSubmitButtonState);
+  document
+    .getElementById("participants")
+    .addEventListener("input", updateSubmitButtonState);
 });
 
 // toggleMode function
@@ -257,7 +261,8 @@ async function submitAIResponse() {
 
     // Delay for 500ms before displaying the question
     setTimeout(() => {
-      icebreakerQuestion.textContent = window.questions[0] || "No questions available";
+      icebreakerQuestion.textContent =
+        window.questions[0] || "No questions available";
       nextButton.disabled = false;
     }, 500);
   } catch (error) {
@@ -291,11 +296,12 @@ async function submitIcebreakerForm() {
   );
   let data = await response.json();
 
-  let listOfParticipants = data.generatedQuestions.map(
-    (o) => Object.keys(o)[0]
-  );
+  let listOfParticipants = data.map((o) => o.Name);
+  let listOfQuestions = data.map((o) => o.Question);
 
-  let listOfQuestions = data.generatedQuestions.map((o) => Object.values(o)[0]);
+  console.log(listOfParticipants);
+  console.log(listOfQuestions);    
+
   questions = [];
   questions = data.generatedQuestions.map((o) => Object.values(o)[0]);
   totalQuestionsInAdvancedMode = listOfParticipants.length;
@@ -343,4 +349,3 @@ function clearTimer() {
     countdown = null;
   }
 }
-
