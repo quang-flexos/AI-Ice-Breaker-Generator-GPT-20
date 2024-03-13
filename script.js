@@ -296,8 +296,14 @@ async function submitIcebreakerForm() {
   );
   let data = await response.json();
 
-  let listOfParticipants = data.map((o) => o.Name);
-  let listOfQuestions = data.map((o) => o.Question);
+  // let listOfParticipants = data.generatedQuestions.map(
+  //   (o) => Object.keys(o)[0]
+  // );
+
+  // let listOfQuestions = data.generatedQuestions.map((o) => Object.values(o)[0]);
+
+  let listOfParticipants = data.generatedQuestions.map((o) => o.Name);
+  let listOfQuestions = data.generatedQuestions.map((o) => o.Question);
 
   console.log(listOfParticipants);
   console.log(listOfQuestions);    
