@@ -315,10 +315,12 @@ async function submitIcebreakerForm() {
   questions = [];
   let currentQuestionIndex = -1;
 
-  window.questions = data.generatedQuestions.map(o => `${o.Name}: ${o.Question}`);
+  questions = data.generatedQuestions.map(o => `${o.Name}: ${o.Question}`);
+  let listOfQuestions = data.generatedQuestions.map(o => o.Question);
   let listOfParticipants = data.generatedQuestions.map(o => o.Name);
   let totalQuestionsInAdvancedMode = listOfParticipants.length;
-
+  
+  window.questions = listOfQuestions;
   window.participants = listOfParticipants.slice(1);
   window.countdown = startTimer(time);
   showNextQuestion();
