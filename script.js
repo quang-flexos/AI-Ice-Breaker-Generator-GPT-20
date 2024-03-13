@@ -311,15 +311,15 @@ async function submitIcebreakerForm() {
   // currentQuestionIndex = -1;
   // window.countdown = startTimer(time);
   // showNextQuestion();
- 
+
   questions = [];
   let currentQuestionIndex = -1;
 
-  questions = data.generatedQuestions.map(o => `${o.Name}: ${o.Question}`);
-  let listOfQuestions = data.generatedQuestions.map(o => o.Question);
-  let listOfParticipants = data.generatedQuestions.map(o => o.Name);
+  questions = data.generatedQuestions.map((o) => `${o.Name}: ${o.Question}`);
+  let listOfQuestions = data.generatedQuestions.map((o) => o.Question);
+  let listOfParticipants = data.generatedQuestions.map((o) => o.Name);
   let totalQuestionsInAdvancedMode = listOfParticipants.length;
-  
+
   window.questions = listOfQuestions;
   window.participants = listOfParticipants.slice(1);
   window.countdown = startTimer(time);
