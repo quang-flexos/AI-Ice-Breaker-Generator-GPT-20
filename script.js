@@ -174,7 +174,11 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
 
 // Function to display the next question
 function showNextQuestion() {
-  currentQuestionIndex++;
+  if (isAIMode) {
+    currentQuestionIndex++;
+  } else {
+    currentQuestionIndex = getRandomQuestionIndex(currentQuestionIndex, questions.length);
+  }
 
   if (currentQuestionIndex < questions.length) {
     icebreakerQuestion.textContent = questions[currentQuestionIndex];
