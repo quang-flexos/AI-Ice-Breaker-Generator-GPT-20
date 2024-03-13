@@ -176,11 +176,13 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
 function showNextQuestion() {
   if (isAIMode) {
     currentQuestionIndex++;
+    totalQuestions = questions.length;
   } else {
     currentQuestionIndex = getRandomQuestionIndex(currentQuestionIndex, questions.length);
+    totalQuestions = questions.length;
   }
 
-  if (currentQuestionIndex < questions.length) {
+  if (currentQuestionIndex < totalQuestions) {
     icebreakerQuestion.textContent = questions[currentQuestionIndex];
   } else {
     icebreakerQuestion.textContent = "That's it for now!";
