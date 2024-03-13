@@ -161,6 +161,9 @@ function resetToDefaultMode() {
 
   background.style.backgroundColor = null;
   timer.style.display = "none";
+
+  // Set isAIMode to false
+  isAIMode = false;
 }
 
 //Random Questions Logic
@@ -264,6 +267,9 @@ async function submitAIResponse() {
     clearInterval(loadingInterval);
     timer.style.display = "block";
     icebreakerQuestion.textContent = "AI response is ready!";
+
+    // Set isAIMode to true
+    isAIMode = true;
 
     // Delay for 500ms before displaying the question
     setTimeout(() => {
