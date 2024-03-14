@@ -76,7 +76,22 @@ const christmasQuestions = [
   "What would be the most unexpected thing to find under your Christmas tree?",
 ];
 
-//Global variables
+const promptMap = {
+  "meet-the-team":
+    "Icebreaker for welcoming and connecting new team members easily.",
+  "project-start":
+    "Fun, engaging question to start our new project with energy.",
+  "fun-day-out": "Light-hearted, bonding activity for our team retreat.",
+  "learn-together": "Interactive icebreaker to kick off our training session.",
+  "monday-icebreaker":
+    "Quick, amusing question to open our weekly team meeting.",
+};
+
+let questions = [];
+let currentQuestionIndex = 0;
+let isAIMode = false;
+let countdown;
+
 const icebreakerQuestion = document.getElementById("icebreaker-question");
 const nextButton = document.getElementById("next-button");
 const normalModeButton = document.getElementById("normal-mode");
@@ -86,41 +101,52 @@ const submitButton = document.getElementById("submit-button");
 const timer = document.getElementById("timer");
 const background = document.getElementById("icebreaker-background");
 
-let questions = [];
-let currentQuestionIndex = -1;
-let totalQuestions = 0;
+document.addEventListener("DOMContentLoaded", init);
 
-let isAIMode = false;
-let countdown;
+function init() {
+  const mode = getURLParameter("mode");
+  setQuestions(mode);
+  setBackground(mode);
 
-// get URL parameter
+  nextButton.addEventListener("click", showNextQuestion);
+  normalModeButton.addEventListener("click", () => toggleMode(false));
+  aiModeButton.addEventListener("click", () => toggleMode(true));
+  addPurposeItemButtonListeners();
+  addInputListeners();
+  submitButton.addEventListener("click", handleSubmit);
+}
+
 function getURLParameter(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-//Document Event Listener
-document.addEventListener("DOMContentLoaded", function () {
-  const mode = getURLParameter("mode");
+function setQuestions(mode) {
   switch (mode) {
     case "halloween":
       questions = halloweenQuestions;
-      background.style.backgroundColor = "#FF8C00";
       break;
     case "christmas":
       questions = christmasQuestions;
-      background.style.backgroundColor = "#008000";
       break;
     default:
       questions = virtualMeetingQuestions;
+  }
+}
+
+function setBackground(mode) {
+  switch (mode) {
+    case "halloween":
+      background.style.backgroundColor = "#FF8C00";
+      break;
+    case "christmas":
+      background.style.backgroundColor = "#008000";
+      break;
+    default:
       background.style.backgroundColor = null;
   }
+}
 
-  nextButton.addEventListener("click", showNextQuestion);
-
-  normalModeButton.addEventListener("click", () => toggleMode(false));
-  aiModeButton.addEventListener("click", () => toggleMode(true));
-
-  // Add event listeners to all purpose-item buttons
+function addPurposeItemButtonListeners() {
   document.querySelectorAll(".purpose-item").forEach((button) => {
     button.addEventListener("click", function () {
       const longerPrompt = promptMap[this.id];
@@ -128,17 +154,17 @@ document.addEventListener("DOMContentLoaded", function () {
       this.style.display = "none";
     });
   });
+}
 
-  // Add event listener for Submit Button
+function addInputListeners() {
   document
     .getElementById("purpose")
     .addEventListener("input", updateSubmitButtonState);
   document
     .getElementById("participants")
     .addEventListener("input", updateSubmitButtonState);
-});
+}
 
-// toggleMode function
 function toggleMode(isAIMode) {
   normalModeButton.classList.toggle("is-active", !isAIMode);
   aiModeButton.classList.toggle("is-active", isAIMode);
@@ -151,22 +177,16 @@ function toggleMode(isAIMode) {
   }
 }
 
-// New function to reset to default mode
 function resetToDefaultMode() {
   clearTimer();
-
   questions = virtualMeetingQuestions;
   currentQuestionIndex = getRandomQuestionIndex(-1, questions.length);
   icebreakerQuestion.textContent = questions[currentQuestionIndex];
-
   background.style.backgroundColor = null;
   timer.style.display = "none";
-
-  // Set isAIMode to false
   isAIMode = false;
 }
 
-//Random Questions Logic
 function getRandomQuestionIndex(currentIndex, totalQuestions) {
   let randomIndex;
   do {
@@ -175,18 +195,10 @@ function getRandomQuestionIndex(currentIndex, totalQuestions) {
   return randomIndex;
 }
 
-// Function to display the next question
 function showNextQuestion() {
-  if (isAIMode) {
-    currentQuestionIndex++;
-    totalQuestions = questions.length;
-  } else {
-    currentQuestionIndex = getRandomQuestionIndex(currentQuestionIndex, questions.length);
-    totalQuestions = questions.length;
-  }
-
-  if (currentQuestionIndex < totalQuestions) {
+  if (currentQuestionIndex < questions.length) {
     icebreakerQuestion.textContent = questions[currentQuestionIndex];
+    currentQuestionIndex++;
   } else {
     icebreakerQuestion.textContent = "That's it for now!";
     nextButton.disabled = true;
@@ -198,26 +210,9 @@ function showNextQuestion() {
   }
 }
 
-/*
-A.I MODE
-*/
-
-//suggestion purpose
-const promptMap = {
-  "meet-the-team":
-    "Icebreaker for welcoming and connecting new team members easily.",
-  "project-start":
-    "Fun, engaging question to start our new project with energy.",
-  "fun-day-out": "Light-hearted, bonding activity for our team retreat.",
-  "learn-together": "Interactive icebreaker to kick off our training session.",
-  "monday-icebreaker":
-    "Quick, amusing question to open our weekly team meeting.",
-};
-
-// Validation function for real-time validation
 function validateInput() {
-  var purpose = document.getElementById("purpose").value.trim();
-  var participants = document
+  const purpose = document.getElementById("purpose").value.trim();
+  const participants = document
     .getElementById("participants")
     .value.split(",")
     .map((p) => p.trim())
@@ -226,21 +221,10 @@ function validateInput() {
   return purpose !== "" && participants.length >= 2;
 }
 
-// Function to update the state of the Submit Button
 function updateSubmitButtonState() {
   submitButton.disabled = !validateInput();
 }
 
-// Event listener for the Submit Button
-submitButton.addEventListener("click", () => {
-  if (validateInput()) {
-    submitAIResponse();
-  } else {
-    alert("Please enter a valid purpose and at least two participants.");
-  }
-});
-
-// Loading animation...
 function showLoadingText(element, text) {
   let dots = 0;
   element.textContent = text;
@@ -250,7 +234,6 @@ function showLoadingText(element, text) {
   }, 500);
 }
 
-// Send AI Response
 async function submitAIResponse() {
   try {
     aiModeWrapper.style.display = "none";
@@ -266,32 +249,23 @@ async function submitAIResponse() {
 
     clearInterval(loadingInterval);
     timer.style.display = "block";
-    icebreakerQuestion.textContent = "AI response is ready!";
-
-    // Set isAIMode to true
     isAIMode = true;
 
-    // Delay for 500ms before displaying the question
-    setTimeout(() => {
-      icebreakerQuestion.textContent =
-        window.questions[0] || "No questions available";
-      nextButton.disabled = false;
-    }, 500);
+    nextButton.disabled = false;
+    showNextQuestion();
   } catch (error) {
     console.error("An error occurred:", error);
   }
 }
 
-//Submit Icebreaker Form
 async function submitIcebreakerForm() {
-  var purpose = document.getElementById("purpose").value;
-  var time = document.getElementById("time").value;
-  var participants = document
+  const purpose = document.getElementById("purpose").value;
+  const time = document.getElementById("time").value;
+  const participants = document
     .getElementById("participants")
     .value.split(",")
     .map((p) => p.trim());
 
-  // Send a request to the back-end with the user's input
   const response = await fetch(
     "https://icebreakre-generator.onrender.com/generate-questions",
     {
@@ -306,19 +280,14 @@ async function submitIcebreakerForm() {
       }),
     }
   );
-  let data = await response.json();
-
-  questions = [];
+  const data = await response.json();
 
   questions = data.generatedQuestions.map((o) => `${o.Name}: ${o.Question}`);
-  window.questions = questions
-  console.log(questions)
+  currentQuestionIndex = 0;
 
   window.countdown = startTimer(time);
-  showNextQuestion(); // Call showNextQuestion here
 }
 
-//Start the timer
 function startTimer(minutes) {
   const endTime = Date.now() + minutes * 60 * 1000;
   const display = document.getElementById("timer");
@@ -341,16 +310,23 @@ function startTimer(minutes) {
     return num < 10 ? "0" + num : num.toString();
   }
 
-  updateTimer(); // Update the timer immediately
+  updateTimer();
   const countdown = setInterval(updateTimer, 1000);
   return countdown;
 }
 
-// Function to clear the timer
 function clearTimer() {
   if (countdown) {
     clearInterval(countdown);
     timer.textContent = "";
     countdown = null;
+  }
+}
+
+function handleSubmit() {
+  if (validateInput()) {
+    submitAIResponse();
+  } else {
+    alert("Please enter a valid purpose and at least two participants.");
   }
 }
